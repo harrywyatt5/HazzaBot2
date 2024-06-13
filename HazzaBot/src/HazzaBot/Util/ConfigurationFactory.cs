@@ -2,7 +2,7 @@
 
 public class ConfigurationFactory
 {
-    // TODO: ConfigurationFactory and BotConfig need to be implemented.
+    // TODO: ConfigurationFactory and BotConfig need to be implemented
     public static BotConfig GetBotConfig()
     {
         return new BotConfig();
