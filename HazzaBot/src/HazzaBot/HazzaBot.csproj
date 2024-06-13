@@ -16,7 +16,4 @@
         <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.1"/>
         <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Security\" />
-    </ItemGroup>
 </Project>
