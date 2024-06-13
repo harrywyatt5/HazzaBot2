@@ -1,8 +1,10 @@
-﻿namespace HazzaBot.Security;
+﻿using Org.BouncyCastle.Crypto.Parameters;
+
+namespace HazzaBot.Security;
 
 public class DiscordPublicKey
 {
-    internal Lazy<DiscordPublicKey> Singleton { get; } = new(() => new DiscordPublicKey());
+    internal static Lazy<DiscordPublicKey> Singleton { get; } = new(() => new DiscordPublicKey());
 
     internal byte[] PublicKey { get; }
 
@@ -19,5 +21,10 @@ public class DiscordPublicKey
         {
             PublicKey = Convert.FromBase64String(publicKey);
         }
+    }
+    
+    internal Ed25519PublicKeyParameters ToEd25519PublicKeyParameters()
+    {
+        return new Ed25519PublicKeyParameters(PublicKey, 0);
     }
 }
