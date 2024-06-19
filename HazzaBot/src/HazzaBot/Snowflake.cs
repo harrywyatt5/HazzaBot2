@@ -4,8 +4,11 @@ using HazzaBot.CustomSerializers;
 namespace HazzaBot;
 
 [JsonConverter(typeof(SnowflakeSerializer))]
-public struct Snowflake
+public struct Snowflake : IEquatable<Snowflake>, IEquatable<long>, IEquatable<string>
 {
+    public static Snowflake ParseOrDefault(string? potentialSnowflake)
+        => long.TryParse(potentialSnowflake, out var value) ? new Snowflake(value) : new Snowflake();
+    
     public long Value { get; private set; }
 
     public Snowflake()
@@ -18,29 +21,25 @@ public struct Snowflake
         Value = value;
     }
 
-    public override string ToString() => Value.ToString();
-
-    public override bool Equals(object? obj)
+    public bool IsDefaultValue()
     {
-        // We can compare Snowflakes, strings and longs
-        if (obj is null) return false;
+        return Value == -1L;
+    }
 
-        if (obj is Snowflake)
+    public override string ToString() => Value.ToString();
+    
+    public bool Equals(Snowflake other) => Value == other.Value;
+    
+    public bool Equals(long other) => Value == other;
+    
+    public bool Equals(string? other)
+    {
+        // We must attempt to parse (as someone could pass null or a non-numeric string)
+        if (long.TryParse(other, out var result))
         {
-            return Value == ((Snowflake)obj).Value;
+            return Value == result;
         }
 
-        if (obj is long)
-        {
-            return Value == (long)obj;
-        }
-
-        if (obj is string)
-        {
-            return ToString() == (string)obj;
-        }
-
-        // Otherwise, we cannot compare these two types
         return false;
     }
 

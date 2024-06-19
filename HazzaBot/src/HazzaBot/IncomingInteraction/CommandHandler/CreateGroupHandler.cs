@@ -4,9 +4,9 @@ using HazzaBot.Interfaces;
 
 namespace HazzaBot.IncomingInteraction.CommandHandler;
 
-[CommandHandler("groupcreate")]
 public class CreateGroupHandler : ICommandHandler
 {
+    [ParentData]
     private ApplicationCommandData _parentData;
 
     // Fields
@@ -14,18 +14,12 @@ public class CreateGroupHandler : ICommandHandler
     [RequiredOption]
     private string _commandName;
     
-    [Option("member1")]
+    [Option("member", isRegularExpression: true)]
     [RequiredOption]
-    private Member _member1;
+    private IList<Member> _members;
 
     public void HandleCommand()
     {
         throw new NotImplementedException();
-    }
-
-    // Constructor - all command handlers should have a constructor that takes in the parent 'data'
-    public CreateGroupHandler(ApplicationCommandData parentData)
-    {
-        _parentData = parentData;
     }
 }
