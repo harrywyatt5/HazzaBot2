@@ -14,19 +14,40 @@ public class CommandDataSerializer : JsonConverter<ApplicationCommandData>
         ICommandHandler handler
     )
     {
+        var options = new List<OptionPopulator>();
+        OptionPopulator.Builder builder;
+        var readingOption = false;
+        
         // Read the whole document and try and populate the fields
         while (reader.Read())
         {
-            // Break if we reach the end of the object
-            if (reader.TokenType == JsonTokenType.EndObject) break;
-            
-            
+            // If we are currently not reading an option/handler property
+            if (!readingOption)
+            {
+                // If we've reached the end of the array of options or the end of the object
+                // (without being in the context of reading an option)
+                if (reader.TokenType == JsonTokenType.EndArray
+                    || reader.TokenType == JsonTokenType.EndObject)
+                {
+                    break;
+                }
+                
+                // If we are at the start of an object, enable flag and init builder
+                if (reader.TokenType == JsonTokenType.StartObject)
+                {
+                    builder = new OptionPopulator.Builder();
+                    readingOption = true;
+                }
+            }
+            // If we are reading an option
+            else
+            {
+                
+            }
         }
     }
 
-    private ICommandHandler _createHandler(
-        string commandName
-    )
+    private ICommandHandler _createHandler(string commandName)
     {
         // Get the handler type or default and create an instance via reflection
         var hType = CommandHandlerAttribute.GetHandlerTypeByCommandName(commandName.ToLower());
